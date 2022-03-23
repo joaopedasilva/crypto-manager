@@ -1,0 +1,21 @@
+a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+p {
+  font-weight: 300;
+}
+
+#topnav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 1rem;
+  background: green;
+}
+
+#topnav a {
+  color: white;
+  padding: 1em;
+}
