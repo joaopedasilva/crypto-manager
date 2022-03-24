@@ -1,15 +1,31 @@
-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.content {
+#content {
+    background-color: lightskyblue;
+    margin: auto;
+    margin-top: 5rem;
+    width: min(80vw, 400px);
     display: flex;
     flex-direction: column;
+    border-radius: 5px;
 }
 
 .base-coin, .target-coin {
+    height: 125px;
+    margin: 5%;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.base-coin > *, .target-coin > * {
+    height: 40%;
+    border-radius: 5px;
+}
+
+select {
+    font-size: 20px;
+}
+
+input {
+    font-size: 50px;
+    text-align: right;
 }

@@ -1,8 +1,23 @@
 .card {
+    background-color: yellowgreen;
     border: 1px solid black;
-    border-radius: 10px;
+    border-radius: 3px;
+    min-height: 75px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .coin, .price {
     display: flex;
+    justify-content: space-between;
+}
+
+.coin > *, .price > * {
+    margin: 0 25px;
+}
+
+img {
+    width: 25px;
+    height: 25px;
 }

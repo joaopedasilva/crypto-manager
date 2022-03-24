@@ -11,7 +11,7 @@ type CoinsDataType = {
   symbol: string;
   name: string;
   image: string;
-  currentPrice: string;
+  current_price: string;
 }
 
 
@@ -23,42 +23,30 @@ export function Home() {
         symbol: "btc",
         name: "Bitcoin",
         image: "",
-        currentPrice: ""
+        current_price: ""
       }
     ]
   );
 
-  useEffect(() => {
+  function fetchAPI() {
     api
-      .get<string, string>('/coins/markets?vs_currency=usd&per_page=10')
-      .then((res) => {
-        const { data } = JSON.parse(res);
-        const coinsFetchedData = data as CoinsDataType[];
-        const coinsFetchedDataList = coinsFetchedData.map<CoinsDataType>((coinData) => {
-          const id = coinData.id;
-          const symbol = coinData.symbol;
-          const name = coinData.name;
-          const image = coinData.image;
-          const currentPrice = coinData.currentPrice;
-          return { id, symbol, name, image, currentPrice };
+      .get<CoinsDataType[]>('/coins/markets?vs_currency=usd&per_page=10')
+      .then(({ data }) => {
+        const coinsData = data.map((coinsFetchedData) => {
+          const { id, symbol, name, image, current_price } = coinsFetchedData;
+          return { id, symbol, name, image, current_price };
         });
-        setCoinsDataList(coinsFetchedDataList);
+        setCoinsDataList(coinsData);
       });
-    const timer = setTimeout(() => {
-      setCoinsDataList(
-        [
-          {
-            id: "",
-            symbol: "",
-            name: "",
-            image: "",
-            currentPrice: ""
-          }
-        ]
-      );
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, [coinsDataList]);
+  }
+
+  useEffect(() => {
+    fetchAPI();
+    const timer = setInterval(() => {
+      fetchAPI();
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <main>
