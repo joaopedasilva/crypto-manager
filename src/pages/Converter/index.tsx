@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import api from '../../services/api';
 
@@ -11,6 +11,8 @@ type CoinsListType = {
 }
 
 export function Converter() {
+  const baseCoinInput = useRef(null);
+  const targetCoinInput = useRef(null);
   const [coinsList, setCoinsList] = useState<CoinsListType[]>(
     [
       {
@@ -21,9 +23,11 @@ export function Converter() {
     ]
   );
   const [converterData, setConverterData] = useState({
-    baseCoin: "bitcoin",
+    baseCoinID: "bitcoin",
+    baseCoinPrice: 0,
     baseCoinAmount: 0,
-    targetCoin: "bitcoin",
+    targetCoinID: "bitcoin",
+    targetCoinPrice: 0,
     targetCoinAmount: 0
   });
 
@@ -50,22 +54,65 @@ export function Converter() {
   function handleConversion(
     event: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
   ) {
+    let baseCoinID: string;
+    let baseCoinPrice: number;
+    let baseCoinAmount: number;
+    let targetCoinID: string;
+    let targetCoinPrice: number;
+    let targetCoinAmount: number;
+    
     if (event.target.name == 'baseCoin') {
-      const baseCoin = coinsList.find(coin => coid.id == event.target.value);
-      const baseCoinPrice = baseCoin.current_price;
-      const targetCoin = coinsList.find(coin => coin.id == converterData.targetCoin);
-      const targetCoinPrice = targetCoin.current_price;
+      baseCoin = coinsList.find(coin => coid.id == event.target.value);
+      baseCoinID = baseCoin.id;
+      baseCoinPrice = baseCoin.current_price;
+      baseCoinAmount = baseCoinInput.current.value;
+      
+      targetCoin = coinsList.find(coin => coin.id == converterData.targetCoin);
+      targetCoinID = targetCoin.id;
+      targetCoinPrice = targetCoin.current_price;
+      targetCoinAmount = targetCoinInput.current.value;
     }
     if (event.target.name == 'targetCoin') {
-      const baseCoin = coinsList.find(coin => coid.id == converterData.baseCoin);
-      const baseCoinPrice = baseCoin.current_price;
-      const targetCoin = coinsList.find(coin => coin.id == event.target.value);
-      const targetCoinPrice = targetCoin.current_price;
+      baseCoin = coinsList.find(coin => coid.id == converterData.baseCoin);
+      baseCoinID = baseCoin.id;
+      baseCoinPrice = baseCoin.current_price;
+      baseCoinAmount = baseCoinInput.current.value;
+      
+      targetCoin = coinsList.find(coin => coin.id == event.target.value);
+      targetCoinID = targetCoin.id;
+      targetCoinPrice = targetCoin.current_price;
+      targetCoinAmount = targetCoinInput.current.value;
+    }
+    if (event.target.name == 'baseCoinAmount') {
+      baseCoin = coinsList.find(coin => coid.id == converterData.baseCoin);
+      baseCoinID = baseCoin.id;
+      baseCoinPrice = baseCoin.current_price;
+      baseCoinAmount = baseCoinInput.current.value;
+      
+      targetCoin = coinsList.find(coin => coin.id == converterData.targetCoin);
+      targetCoinID = targetCoin.id;
+      targetCoinPrice = targetCoin.current_price;
+      targetCoinAmount = targetCoinInput.current.value;
+    }
+    if (event.target.name == 'targetCoinAmount') {
+      baseCoin = coinsList.find(coin => coid.id == converterData.baseCoin;
+      baseCoinID = baseCoin.id;
+      baseCoinPrice = baseCoin.current_price;
+      baseCoinAmount = baseCoinInput.current.value;
+      
+      targetCoin = coinsList.find(coin => coin.id == converterData.targetCoin);
+      targetCoinID = targetCoin.id;
+      targetCoinPrice = targetCoin.current_price;
+      targetCoinAmount = targetCoinInput.current.value;
     }
     setConverterData(
       {
-        ...converterData,
-        [event.target.name]: event.target.value
+        baseCoinID,
+        baseCoinPrice,
+        baseCoinAmount,
+        targetCoinID,
+        targetCoinPrice,
+        targetCoinAmount
       }
     );
   }
@@ -111,6 +158,7 @@ export function Converter() {
             type="text"
             id="target-coin-input"
             name="targetCoinAmount"
+            ref={}
             value={converterData.targetCoinAmount}
             onChange={handleConversion}
           />
