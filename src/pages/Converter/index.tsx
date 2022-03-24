@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import api from '../../services/api';
 
@@ -14,12 +14,18 @@ export function Converter() {
   const [coinsList, setCoinsList] = useState<CoinsListType[]>(
     [
       {
-        id: "",
-        name: "",
-        current_price: ""
+        id: "bitcoin",
+        name: "Bitcoin",
+        current_price: "0"
       }
     ]
   );
+  const [converterData, setConverterData] = useState({
+    baseCoin: "bitcoin",
+    baseCoinAmount: 0,
+    targetCoin: "bitcoin",
+    targetCoinAmount: 0
+  });
 
   function fetchAPI() {
     api
@@ -41,37 +47,73 @@ export function Converter() {
     return () => clearInterval(timer);
   }, []);
 
-  function handleConversion() {
-    /*const baseCoinSelector = document.getElementById('base-coin-selector');
-    const baseCoinSelectorValue = baseCoinSelector.selectedOptions[baseCoinSelector.selectedIndex].nodeValue;
-    const baseCoinInput = document.getElementById('base-coin-input').nodeValue;
-    const targetCoinSelector = document.getElementById('target-coin-selector');
-    const targetCoinSelectorValue = targetCoinSelector.selectedOptions[targetCoinSelector.selectedIndex].nodeValue;
-    const targetCoinInput = document.getElementById('target-coin-input').nodeValue;*/
+  function handleConversion(
+    event: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
+  ) {
+    if (event.target.name == 'baseCoin') {
+      const baseCoin = coinsList.find(coin => coid.id == event.target.value);
+      const baseCoinPrice = baseCoin.current_price;
+      const targetCoin = coinsList.find(coin => coin.id == converterData.targetCoin);
+      const targetCoinPrice = targetCoin.current_price;
+    }
+    if (event.target.name == 'targetCoin') {
+      const baseCoin = coinsList.find(coin => coid.id == converterData.baseCoin);
+      const baseCoinPrice = baseCoin.current_price;
+      const targetCoin = coinsList.find(coin => coin.id == event.target.value);
+      const targetCoinPrice = targetCoin.current_price;
+    }
+    setConverterData(
+      {
+        ...converterData,
+        [event.target.name]: event.target.value
+      }
+    );
   }
 
   return (
     <main>
       <div id="content">
         <div className="base-coin">
-          <select id="base-coin-selector">
+          <select
+            id="base-coin-selector"
+            name="baseCoin"
+            value={converterData.baseCoin}
+            onChange={handleConversion}
+          >
             {
               coinsList.map((coin) => 
                 <option key={coin.id} value={coin.id}>{coin.name}</option>
               )
             }
           </select>
-          <input type="text" id="base-coin-input" onChange={handleConversion} />
+          <input
+            type="text"
+            id="base-coin-input"
+            name="baseCoinAmount"
+            value={converterData.baseCoinAmount}
+            onChange={handleConversion}
+          />
         </div>
         <div className="target-coin">
-          <select id="target-coin-selector" onChange={handleConversion}>
+          <select
+            id="target-coin-selector"
+            name="targetCoin"
+            value={converterData.targetCoin}
+            onChange={handleConversion}
+          >
             {
               coinsList.map((coin) => 
                 <option key={coin.id} value={coin.id}>{coin.name}</option>
               )
             }
           </select>
-          <input type="text" id="target-coin-input" onChange={handleConversion} />
+          <input
+            type="text"
+            id="target-coin-input"
+            name="targetCoinAmount"
+            value={converterData.targetCoinAmount}
+            onChange={handleConversion}
+          />
         </div>
       </div>
     </main>
